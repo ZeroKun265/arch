@@ -62,3 +62,6 @@ We can install kde, sddm, network manager and other stuff for a basic setup usin
 ## 3. Installing all the other packages
 Now that we have a gui, we can install all the other packages
 Just run `yay -S - < packages.txt`
+
+## 4. Dotfiles and other configs
+You can run the `copy-config.sh` script (with sudo or root) to automatically clone all the config files and dot files into the correct places (hopefully i kept them all up to date)

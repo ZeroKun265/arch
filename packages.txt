@@ -65,7 +65,6 @@ wine
 winetricks
 vkd3d
 dxvk-bin
-wine-staging
 mangohud
 lib32-mesa
 vulkan-tools
