@@ -86,7 +86,6 @@ protontricks
 winetricks
 kdeconnect
 pandoc
-textlive-most
 python-pip
 podman
 networkmanager-openvpn
@@ -99,12 +98,12 @@ noto-fonts
 noto-fonts-cjk
 noto-fonts-extra
 noto-fonts-emoji
-inte-gmmlib
+intel-gmmlib
 intel-media-driver
 jdk8-openjdk
 vulkan-mesa-layers
 lib32-mesa
 lib32-mesa-utils
-lib32-mesa-layers
-obs-websockets
+obs-websocket
 github-cli
+texlive-basic
