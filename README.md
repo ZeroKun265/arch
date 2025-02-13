@@ -65,3 +65,16 @@ Just run `yay -S - < packages.txt`
 
 ## 4. Dotfiles and other configs
 You can run the `copy-config.sh` script (with sudo or root) to automatically clone all the config files and dot files into the correct places (hopefully i kept them all up to date)
+
+## 5. Kde theming
+The theme coulb be anyone, the latest one i use is kde catpuccin, and sddm catpuccin, for the instructions to install them check their github pages since they could change 
+
+## 6. Local scripts and apps
+I prefer having my scripts and downloaded random icons etc.. in a `.local_bin` folder instead of the regular `.local` folder for simplicity
+Run the `local_bin.sh` script to copy that into the home folder
+
+##  7. Dual boot
+If you're dual booting, chances are you lost access to windows, the *packages.txt* contains os-prober, so you can:
+- `nano /etc/defautl/grub` and uncomment the line to enable os prober if not already enabled
+- `grub--mkconfig -o /boot/grub.cfg`
+

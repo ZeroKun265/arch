@@ -1,0 +1,121 @@
+#!/usr/bin/env python
+import sys
+import json
+import keyboard
+import time
+
+def help():
+    print("Pyboard 0.1-alpha:")
+    print("Usage: pyboard [mode] \n")
+    print("Used to record/replay keyboard inputs")
+    print("Mode: ")
+    print("      -r : record keys and play them")
+    print("      -s=number sets speed factor for playback")
+    print("      -l : keys are played in loop (only if played, record files are not infinite)")
+    print("      -R : record keys and store to file")
+    print("      -p=file : plays keys from file (when recording it can be used to specify the output file)")
+    print("      -k=key : selects the key to stop recording, default: escape")
+
+def record_and_play(exit_key = "esc", loop = False, speed = 1):
+    print("Recording keys")
+    recorded = keyboard.record(until=exit_key)
+    print(f"Keys recorded, now playing: (loop = {loop}, exit_key = {exit_key}, speed = {speed})")
+    time.sleep(3)
+    if loop:
+        print("Playing keys in loop")
+        while True:
+            keyboard.play(recorded, speed_factor=speed)
+    else:
+        keyboard.play(recorded, speed_factor=speed)
+    print("Finished playing keys")
+
+
+def record_and_save(file = "keys.txt", exit_key = "esc"):
+    print("Recording keys")
+    recorded = keyboard.record(until=exit_key)
+    print(f"Keys recorded, now writing to file '{file}'")
+    content = ""
+    recorded[1:]
+    for event in recorded:
+        content += event.to_json() + "\n"
+        
+    with open(file, "w") as f:
+        f.write(content)
+
+def read_file(filename):
+    pre_recorded = []
+    with open(filename, "r") as f:
+        for line in f.read().splitlines():
+            event_json = json.loads(line)
+            key = keyboard.KeyboardEvent(event_json["event_type"],
+                                        scan_code=event_json["scan_code"],
+                                        name=event_json["name"],
+                                        time=event_json["time"],
+                                        device=event_json["device"],
+                                        is_keypad= event_json["is_keypad"])
+            pre_recorded.append(key)
+
+    return pre_recorded
+
+def play_from_file(loop = False, speed = 1, file="keys.txt"):
+    print("Reading keys from file")
+    recorded = read_file(file)
+    print("File read complete, now playing the keys")
+    if loop:
+        print("Playing keys in loop")
+        while True:
+            keyboard.play(recorded, speed_factor=speed)
+    else:
+        keyboard.play(recorded, speed_factor=speed)
+    print("Finished playing keys")
+    
+
+
+record_save = False
+record_play = False
+play_file = False
+exit_key = "esc"
+rec_file = ""
+loop = False
+speed = 1
+args = sys.argv[1:]
+if len(args) == 0:
+    help()
+for arg in args:
+    if arg.startswith("-"):
+        if arg == "-r":
+            record_play = True
+        if arg == "-l":
+            loop = True
+        if arg == "-R":
+            record_save = True
+        if arg.startswith("-s"):
+            try:
+                speed = abs(float(arg.split("=")[1]))
+            except KeyError:
+                print("Speed factor not provided, use the sintax -s=number with no spaces")
+                print(f"Used argument: '{arg}'")
+            except ValueError:
+                print("Speed factor must be a number")
+                print(f"Used argument: '{arg}'")
+            except:
+                print("Unexpected error when reading speed factor")
+        if arg.startswith("-k"):
+            print("key arg")
+            exit_key=arg.split("=")[1]
+        if arg.startswith("-p"):
+            play_file = True
+            try:
+                rec_file = arg.split("=")[1]
+            except IndexError:
+                print("Recording file not provided, use the syntax -p=file_name with no spaces (quotes are supported)")
+    else:
+        print(f"Unrecognised argument : '{arg}'" )
+
+print(exit_key)
+if record_play:
+    record_and_play(exit_key = exit_key, loop = loop, speed = speed)
+elif record_save:
+    record_and_save(file=rec_file, exit_key=exit_key)
+elif play_file:
+    play_from_file(loop = loop, speed = speed, file = rec_file)

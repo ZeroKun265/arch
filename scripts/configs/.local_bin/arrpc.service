@@ -1,0 +1,7 @@
+[Service]
+Type=simple
+ExecStart=arrpc
+WorkingDirectory=~
+
+[Install]
+WantedBy=default.target

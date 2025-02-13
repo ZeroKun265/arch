@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+upower -i $(upower -e | grep "BAT") | grep -E "state|to charged|percentage"

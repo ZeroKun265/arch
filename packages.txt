@@ -106,3 +106,5 @@ lib32-mesa-utils
 obs-websocket
 github-cli
 texlive-basic
+wget
+wl-clipboard
